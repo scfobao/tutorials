@@ -22,12 +22,16 @@ type Error struct {
 }
 
 func Init() {
+
 	serviceClient = us.NewUserService("mu.micro.book.srv.user", client.DefaultClient)
+
 }
 
 // Login 登录入口
 func Login(w http.ResponseWriter, r *http.Request) {
 	// 只接受POST请求
+
+	print("hi,you are here")
 	if r.Method != "POST" {
 		log.Logf("非法请求")
 		http.Error(w, "非法请求", 400)
@@ -40,6 +44,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	rsp, err := serviceClient.QueryUserByName(context.TODO(), &us.Request{
 		UserName: r.Form.Get("userName"),
 	})
+
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return

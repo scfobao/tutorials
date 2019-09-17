@@ -17,7 +17,7 @@ func main() {
 	// 初始化配置
 	basic.Init()
 
-	// 使用consul注册
+	// 使用etcd注册
 	micReg := consul.NewRegistry(registryOptions)
 
 	// 创建新服务
@@ -26,7 +26,7 @@ func main() {
 		web.Name("mu.micro.book.web.user"),
 		web.Version("latest"),
 		web.Registry(micReg),
-		web.Address(":8088"),
+		web.Address(":8889"),
 	)
 
 	// 初始化服务

@@ -20,6 +20,7 @@ var (
 	defaultRootPath         = "app"
 	defaultConfigFilePrefix = "application-"
 	consulConfig            defaultConsulConfig
+	etcdConfig              defaultEtcdConfig
 	mysqlConfig             defaultMysqlConfig
 	profiles                defaultProfiles
 	m                       sync.RWMutex
@@ -77,6 +78,7 @@ func Init() {
 
 	// 赋值
 	config.Get(defaultRootPath, "consul").Scan(&consulConfig)
+	config.Get(defaultRootPath, "etcd").Scan(&etcdConfig)
 	config.Get(defaultRootPath, "mysql").Scan(&mysqlConfig)
 
 	// 标记已经初始化
@@ -91,4 +93,9 @@ func GetMysqlConfig() (ret MysqlConfig) {
 // GetConsulConfig 获取Consul配置
 func GetConsulConfig() (ret ConsulConfig) {
 	return consulConfig
+}
+
+// GetEtcdConfig 获取Consul配置
+func GetEtcdConfig() (ret EtcdConfig) {
+	return etcdConfig
 }

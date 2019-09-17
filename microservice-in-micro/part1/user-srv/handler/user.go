@@ -36,6 +36,7 @@ func (e *Service) QueryUserByName(ctx context.Context, req *s.Request, rsp *s.Re
 
 		return err
 	}
+	println(user)
 
 	rsp.User = user
 	rsp.Success = true

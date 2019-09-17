@@ -20,6 +20,7 @@ var (
 	defaultRootPath         = "app"
 	defaultConfigFilePrefix = "application-"
 	consulConfig            defaultConsulConfig
+	etcdConfig              defaultEtcdConfig
 	profiles                defaultProfiles
 	m                       sync.RWMutex
 	inited                  bool
@@ -83,4 +84,9 @@ func Init() {
 // GetConsulConfig 获取Consul配置
 func GetConsulConfig() (ret ConsulConfig) {
 	return consulConfig
+}
+
+// GetEtcdConfig 获取Consul配置
+func GetEtcdConfig() (ret EtcdConfig) {
+	return etcdConfig
 }

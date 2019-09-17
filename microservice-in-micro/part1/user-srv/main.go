@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part1/user-srv/basic/config"
@@ -18,13 +19,16 @@ import (
 func main() {
 	// 初始化配置、数据库等信息
 	basic.Init()
+	log.Logf("[main] 初始化成功")
 
-	// 使用consul注册
+	// 使用etcd注册
 	micReg := consul.NewRegistry(registryOptions)
 
 	// 新建服务
 	service := micro.NewService(
 		micro.Name("mu.micro.book.srv.user"),
+		micro.RegisterTTL(time.Second*15),
+		micro.RegisterInterval(time.Second*10),
 		micro.Registry(micReg),
 		micro.Version("latest"),
 	)
@@ -50,5 +54,7 @@ func main() {
 
 func registryOptions(ops *registry.Options) {
 	consulCfg := config.GetConsulConfig()
+
 	ops.Addrs = []string{fmt.Sprintf("%s:%d", consulCfg.GetHost(), consulCfg.GetPort())}
+
 }
