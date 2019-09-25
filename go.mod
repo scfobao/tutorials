@@ -28,12 +28,13 @@ require (
 	github.com/lusis/slack-test v0.0.0-20190426140909-c40012f20018 // indirect
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-config v1.1.1-0.20190603113547-03fb75f2f1e4
-	github.com/micro/go-micro v1.9.1
+	github.com/micro/go-micro v1.10.0
 	github.com/micro/go-plugins v1.2.0
 	github.com/micro/go-web v1.0.0
 	github.com/micro/micro v1.8.0
 	github.com/montanaflynn/stats v0.5.0
 	github.com/opentracing/opentracing-go v1.1.0
+	github.com/smallnest/rpcx v0.0.0-20190920111107-cc22806312fd
 	github.com/uber/jaeger-client-go v2.16.0+incompatible
 	go.uber.org/zap v1.10.0
 	google.golang.org/genproto v0.0.0-20190801165951-fa694d86fc64

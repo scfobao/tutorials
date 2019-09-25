@@ -6,6 +6,7 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/config"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/plugins/graylog"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/user-srv/handler"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/user-srv/model"
 	s "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/user-srv/proto/user"
@@ -29,6 +30,7 @@ type userCfg struct {
 func main() {
 	// 初始化配置、数据库等信息
 	initCfg()
+	graylog.GetLog(*cfg).Write(map[string]interface{}{"test": "test", "tag": "i am from microtest"})
 
 	// 使用consul注册
 	micReg := consul.NewRegistry(registryOptions)

@@ -1,7 +1,7 @@
 app:
   redis:
     enabled: true
-    conn: 127.0.0.1:6379
+    conn: www.edaoduo.com:16379
     dbNum: 8
     password:
     timeout: 3000

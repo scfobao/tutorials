@@ -9,17 +9,16 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/basic/config"
-	z "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/plugins/zap"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/plugins/graylog"
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/consul"
 	"github.com/micro/go-plugins/config/source/grpc"
-	"go.uber.org/zap"
+	"github.com/smallnest/rpcx/log"
 )
 
 var (
-	log     = z.GetLogger()
 	appName = "auth_srv"
 	cfg     = &authCfg{}
 )
@@ -31,7 +30,7 @@ type authCfg struct {
 func main() {
 	// 初始化配置、数据库等信息
 	initCfg()
-
+	graylog.GetLog(cfg).Write(map[string]interface{}{"data": "hello i am auth srv"})
 	// 使用consul注册
 	micReg := consul.NewRegistry(registryOptions)
 
@@ -87,8 +86,6 @@ func initCfg() {
 	if err != nil {
 		panic(err)
 	}
-
-	log.Info("[initCfg] 配置", zap.Any("cfg", cfg))
 
 	return
 }

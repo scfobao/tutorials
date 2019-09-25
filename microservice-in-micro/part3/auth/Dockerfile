@@ -1,3 +1,4 @@
 FROM alpine
-ADD auth-srv /auth-srv
-ENTRYPOINT [ "/auth-srv" ]
+ADD auth /auth
+ADD ./conf /conf/
+ENTRYPOINT [ "/auth" ]

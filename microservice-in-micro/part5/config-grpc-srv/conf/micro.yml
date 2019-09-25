@@ -15,12 +15,15 @@ micro:
       maxAge: 10
   consul:
     enabled: true
-    host: 192.168.10.86
+    host: www.edaoduo.com
     port: 8500
+  graylog:
+    host: 47.93.223.192
+    port: 5555
   db:
     mysql:
       enabled: true
-      url: root:123@(127.0.0.1:3306)/micro_book_mall?charset=utf8&parseTime=true&loc=Asia%2FShanghai
+      url: root:root@(www.edaoduo.com:13306)/microdb?charset=utf8&parseTime=true
       maxIdleConnection: 100
       maxOpenConnection: 130
   inv_srv:
@@ -47,7 +50,7 @@ micro:
     port: 9080
   redis:
     enabled: true
-    conn: 127.0.0.1:6379
+    conn: www.edaoduo.com:16379
     dbNum: 8
     password:
     timeout: 3000

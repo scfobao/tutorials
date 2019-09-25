@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/plugins/db"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part5/plugins/graylog"
 	proto "github.com/micro-in-cn/tutorials/microservice-in-micro/part5/user-srv/proto/user"
 	"github.com/micro/go-micro/util/log"
 )
@@ -13,7 +14,7 @@ func (s *service) QueryUserByName(userName string) (ret *proto.User, err error) 
 	o := db.GetDB()
 
 	ret = &proto.User{}
-
+	graylog.GetLog(nil).Write(map[string]interface{}{"data": ret, "tag": "QueryUserByName"})
 	// 查询
 	err = o.QueryRow(queryString, userName).Scan(&ret.Id, &ret.Name, &ret.Pwd)
 	if err != nil {
