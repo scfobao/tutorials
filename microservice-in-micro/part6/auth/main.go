@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/handler"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/auth/model"
@@ -9,6 +10,7 @@ import (
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/common"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/basic/config"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/graylog"
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
@@ -18,8 +20,9 @@ import (
 )
 
 var (
-	appName = "auth_srv"
-	cfg     = &authCfg{}
+	appName      = "auth_srv"
+	cfg          = &authCfg{}
+	configServerAddress = "192.168.1.232:9600"
 )
 
 type authCfg struct {
@@ -29,7 +32,8 @@ type authCfg struct {
 func main() {
 	// 初始化配置、数据库等信息
 	initCfg()
-
+	configServerAddress = os.Getenv("CONFIG_SERVER") + ":" + os.Getenv("CONFIG_SERVER_PORT")
+	graylog.GetLog(cfg).Write(map[string]interface{}{"data": "hello i am auth srv"})
 	// 使用consul注册
 	micReg := consul.NewRegistry(registryOptions)
 
@@ -72,7 +76,7 @@ func registryOptions(ops *registry.Options) {
 
 func initCfg() {
 	source := grpc.NewSource(
-		grpc.WithAddress("127.0.0.1:9600"),
+		grpc.WithAddress(configServerAddress),
 		grpc.WithPath("micro"),
 	)
 

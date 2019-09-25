@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/afex/hystrix-go/hystrix"
@@ -21,8 +22,9 @@ import (
 )
 
 var (
-	appName = "user_web"
-	cfg     = &userCfg{}
+	appName             = "user_web"
+	cfg                 = &userCfg{}
+	configServerAddress = "192.168.1.232:9600"
 )
 
 type userCfg struct {
@@ -32,7 +34,7 @@ type userCfg struct {
 func main() {
 	// 初始化配置
 	initCfg()
-
+	configServerAddress = os.Getenv("CONFIG_SERVER") + ":" + os.Getenv("CONFIG_SERVER_PORT")
 	// 使用consul注册
 	micReg := consul.NewRegistry(registryOptions)
 
@@ -86,7 +88,7 @@ func registryOptions(ops *registry.Options) {
 
 func initCfg() {
 	source := grpc.NewSource(
-		grpc.WithAddress("127.0.0.1:9600"),
+		grpc.WithAddress(configServerAddress),
 		grpc.WithPath("micro"),
 	)
 
