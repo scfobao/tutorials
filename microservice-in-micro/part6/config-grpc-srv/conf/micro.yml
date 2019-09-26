@@ -52,6 +52,7 @@ micro:
     name: mu.micro.book.srv.user
     address: 
     port: 9090
+    
   user_web:
     name: mu.micro.book.web.user
     address: 0.0.0.0

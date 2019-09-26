@@ -55,3 +55,10 @@ go build -o ./config-grpc-srv/config-grpc-srv ./config-grpc-srv/main.go
 echo "config-grpc-srv build success."
 
 #------------------------------
+
+
+docker-compose build
+docker-compose push
+
+docker stack rm myservice
+docker stack deploy -c docker-compose.yml myservice

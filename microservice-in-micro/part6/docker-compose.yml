@@ -5,50 +5,67 @@ services:
       build: ./config-grpc-srv
       ports:
         - "9600:9600"
-      volumes:
-        - ./config-grpc-srv/conf:/conf
+
+      networks: 
+        - micro-net
     auth:
       image: scfobao/micro_auth
       build: ./auth
       environment:
         - CONFIG_SERVER=127.0.0.1
         - CONFIG_SERVER_PORT=9600
+      networks: 
+        - micro-net
     inventory-srv:
       image: scfobao/micro_inventory_srv
       build: ./inventory-srv   
       environment:
         - CONFIG_SERVER=127.0.0.1
-        - CONFIG_SERVER_PORT=9600       
+        - CONFIG_SERVER_PORT=9600   
+      networks: 
+        - micro-net    
     orders-srv:
       image: scfobao/micro_orders_srv
       build: ./orders-srv 
       environment:
         - CONFIG_SERVER=127.0.0.1
-        - CONFIG_SERVER_PORT=9600          
+        - CONFIG_SERVER_PORT=9600    
+      networks: 
+        - micro-net      
     payment-srv:
       image: scfobao/micro_payment_srv
       build: ./payment-srv    
       environment:
         - CONFIG_SERVER=127.0.0.1
-        - CONFIG_SERVER_PORT=9600                 
+        - CONFIG_SERVER_PORT=9600  
+      networks: 
+        - micro-net               
     user-srv:
       image: scfobao/micro_user_srv
       build: ./user-srv      
       environment:
         - CONFIG_SERVER=127.0.0.1
-        - CONFIG_SERVER_PORT=9600              
+        - CONFIG_SERVER_PORT=9600 
+      networks: 
+        - micro-net             
     user-web:
       image: scfobao/micro_user_web
       build: ./user-web    
       environment:
         - CONFIG_SERVER=127.0.0.1
-        - CONFIG_SERVER_PORT=9600         
+        - CONFIG_SERVER_PORT=9600  
+      ports:
+        - "81:81"  
+      networks: 
+        - micro-net     
     payment-web:
       image: scfobao/micro_payment_web
       build: ./payment-web
       environment:
         - CONFIG_SERVER=127.0.0.1
-        - CONFIG_SERVER_PORT=9600      
+        - CONFIG_SERVER_PORT=9600  
+      networks: 
+        - micro-net    
        
     orders-web:
       image: scfobao/micro_orders_web
@@ -56,18 +73,28 @@ services:
       environment:
         - CONFIG_SERVER=127.0.0.1
         - CONFIG_SERVER_PORT=9600
+      networks: 
+        - micro-net
 
     micro:
       command: --registry=consul --registry_address=www.edaoduo.com:8500 --api_namespace=mu.micro.book.web api --handler=web  --address=:8080 
       image: microhq/micro:latest
       ports:
         - "8080:8080"
+      networks: 
+        - micro-net
 
     micro-web: 
       command: --registry=consul --registry_address=www.edaoduo.com:8500 web 
       image: microhq/micro:latest
       ports:
         - "8082:8082"
+      networks: 
+        - micro-net
+
+networks: 
+    micro-net:
+      driver: overlay
 
 
 
