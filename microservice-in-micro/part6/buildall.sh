@@ -1,64 +1,68 @@
 #!/bin/bash
-echo "start build auth ..."
+typeset -l SVC
+SVC=$1
+
+PROJECTNAME="micro"
+SERVICELIST=("config-grpc-srv" "auth" "inventory-srv" "user-srv" \
+"user-web"  "orders-srv" "orders-web" \
+"payment-srv" "payment-web" \
+)
+
+servicePubed(){
+
+    FILENAME=service_pubed.txt
+    rm $FILENAME
+    
+    docker service ls --filter name=$1 --format "{{.ID}}" > $FILENAME
+    FILESIZE=$(stat -c%s "$FILENAME")
+    if [ $FILESIZE != "0" ]; then
+      return 1
+    else
+      return 0
+    fi 
+    
+}
+
+deployService(){
+
+        srvname=$1 
+        echo "start go build $srvname ..."    
+        go build -o ./$srvname/$srvname ./$srvname/main.go ./$srvname/plugin.go
+        echo "$srvname build success."
+
+        docker build ./$srvname -t scfobao/${PROJECTNAME}_${srvname}:latest
+        docker push scfobao/${PROJECTNAME}_${srvname}:latest
+        # servicePubed ${PROJECTNAME}_${srvname}
+        # if [ $? == 0 ]; then
+            
+        #     if [ "$srvname" == "config-grpc-srv" ]; then
+        #          echo "$srvname with port publish"
+        #         docker service create --name=${PROJECTNAME}_${srvname} --network $NETWORKNAME --publish 9600:9600 scfobao/${PROJECTNAME}_${srvname}:latest 
+        #     else
+        #         echo "$srvname without port publish"
+        #         docker service create --name=${PROJECTNAME}_${srvname} --network $NETWORKNAME scfobao/${PROJECTNAME}_${srvname}:latest 
+        #     fi
+        # else       
+        
+        # docker service update  ${PROJECTNAME}_${srvname}
+        # fi
+  
+}
+
+deployAllService(){
+    for element in ${SERVICELIST[@]}
+    #也可以写成for element in ${array[*]}
+    do
+      deployService $element
+    done
+}
+
 export GOOS=linux
-go build -o ./auth/auth ./auth/main.go ./auth/plugin.go
-echo "auth build success."
+export GOARCH=amd64
 
-#------------------------------
-echo "start build inventory-srv ..."
-go build -o ./inventory-srv/inventory-srv ./inventory-srv/main.go ./inventory-srv/plugin.go
-echo "inventory-srv build success."
+if [ $SVC == "all" ]; then   
+    deployAllService
+else    
+    deployService $SVC
+fi
 
-#------------------------------
-echo "start build orders-srv ..."
-go build -o ./orders-srv/orders-srv ./orders-srv/main.go ./orders-srv/plugin.go
-echo "orders-srv build success."
-
-#------------------------------
-
-echo "start build orders-web ..."
-go build -o ./orders-web/orders-web ./orders-web/main.go ./orders-web/plugin.go
-echo "orders-web build success."
-
-#------------------------------
-
-echo "start build payment-srv ..."
-go build -o ./payment-srv/payment-srv ./payment-srv/main.go ./payment-srv/plugin.go
-echo "payment-srv build success."
-
-#----------------------------------------------------------------------------
-
-echo "start build payment-web ..."
-go build -o ./payment-web/payment-web ./payment-web/main.go ./payment-web/plugin.go
-echo "payment-web build success."
-
-#----------------------------------------------------------------------------
-
-
-echo "start build user-srv ..."
-go build -o ./user-srv/user-srv ./user-srv/main.go ./user-srv/plugin.go
-echo "user-srv build success."
-
-#------------------------------
-
-
-echo "start build user-web ..."
-go build -o ./user-web/user-web ./user-web/main.go ./user-web/plugin.go
-echo "user-web build success."
-
-#------------------------------
-
-
-
-echo "start build config-grpc-srv ..."
-go build -o ./config-grpc-srv/config-grpc-srv ./config-grpc-srv/main.go 
-echo "config-grpc-srv build success."
-
-#------------------------------
-
-
-docker-compose build
-docker-compose push
-
-docker stack rm myservice
-docker stack deploy -c docker-compose.yml myservice

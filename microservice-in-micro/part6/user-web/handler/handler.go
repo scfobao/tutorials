@@ -13,6 +13,7 @@ import (
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-plugins/wrapper/breaker/hystrix"
+	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/graylog"
 )
 
 var (
@@ -43,6 +44,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	graylog.GetLog(nil).Write(map[string]interface{}{"request": r})
 	r.ParseForm()
 
 	// 调用后台服务

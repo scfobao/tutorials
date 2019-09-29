@@ -1,7 +1,7 @@
 version: "3.3"
 services:
     config-grpc-srv:
-      image: scfobao/config_grpc_srv
+      image: scfobao/micro_config-grpc-srv:latest
       build: ./config-grpc-srv
       ports:
         - "9600:9600"
@@ -9,70 +9,69 @@ services:
       networks: 
         - micro-net
     auth:
-      image: scfobao/micro_auth
+      image: scfobao/micro_auth:latest
       build: ./auth
       environment:
-        - CONFIG_SERVER=127.0.0.1
-        - CONFIG_SERVER_PORT=9600
+         CONFIG_SERVER: 192.168.1.132
+         CONFIG_SERVER_PORT: 9600
       networks: 
         - micro-net
     inventory-srv:
-      image: scfobao/micro_inventory_srv
+      image: scfobao/micro_inventory-srv:latest
       build: ./inventory-srv   
       environment:
-        - CONFIG_SERVER=127.0.0.1
-        - CONFIG_SERVER_PORT=9600   
+         CONFIG_SERVER: 192.168.1.132
+         CONFIG_SERVER_PORT: 9600  
       networks: 
         - micro-net    
     orders-srv:
-      image: scfobao/micro_orders_srv
+      image: scfobao/micro_orders-srv:latest
       build: ./orders-srv 
       environment:
-        - CONFIG_SERVER=127.0.0.1
-        - CONFIG_SERVER_PORT=9600    
+         CONFIG_SERVER: 192.168.1.132
+         CONFIG_SERVER_PORT: 9600   
       networks: 
         - micro-net      
     payment-srv:
-      image: scfobao/micro_payment_srv
+      image: scfobao/micro_payment-srv:latest
       build: ./payment-srv    
       environment:
-        - CONFIG_SERVER=127.0.0.1
-        - CONFIG_SERVER_PORT=9600  
+         CONFIG_SERVER: 192.168.1.132
+         CONFIG_SERVER_PORT: 9600
       networks: 
         - micro-net               
     user-srv:
-      image: scfobao/micro_user_srv
+      image: scfobao/micro_user-srv:latest
       build: ./user-srv      
       environment:
-        - CONFIG_SERVER=127.0.0.1
-        - CONFIG_SERVER_PORT=9600 
+         CONFIG_SERVER: 192.168.1.132
+         CONFIG_SERVER_PORT: 9600
       networks: 
         - micro-net             
     user-web:
-      image: scfobao/micro_user_web
-      build: ./user-web    
-      environment:
-        - CONFIG_SERVER=127.0.0.1
-        - CONFIG_SERVER_PORT=9600  
-      ports:
-        - "81:81"  
+      image: scfobao/micro_user-web:latest
+      build: ./user-web   
       networks: 
-        - micro-net     
+        - micro-net    
+      environment:
+         CONFIG_SERVER: 192.168.1.132
+         CONFIG_SERVER_PORT: 9600 
+        
     payment-web:
-      image: scfobao/micro_payment_web
+      image: scfobao/micro_payment-web:latest
       build: ./payment-web
       environment:
-        - CONFIG_SERVER=127.0.0.1
-        - CONFIG_SERVER_PORT=9600  
+         CONFIG_SERVER: 192.168.1.132
+         CONFIG_SERVER_PORT: 9600
       networks: 
         - micro-net    
        
     orders-web:
-      image: scfobao/micro_orders_web
+      image: scfobao/micro_orders-web:latest
       build: ./orders-web 
       environment:
-        - CONFIG_SERVER=127.0.0.1
-        - CONFIG_SERVER_PORT=9600
+         CONFIG_SERVER: 192.168.1.132
+         CONFIG_SERVER_PORT: 9600
       networks: 
         - micro-net
 
