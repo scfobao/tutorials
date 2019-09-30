@@ -28,8 +28,8 @@ type Error struct {
 }
 
 func Init() {
-	hystrix_go.DefaultVolumeThreshold = 20
-	hystrix_go.DefaultErrorPercentThreshold = 10
+	hystrix_go.DefaultVolumeThreshold = 1
+	hystrix_go.DefaultErrorPercentThreshold = 1
 	cl := hystrix.NewClientWrapper()(client.DefaultClient)
 	serviceClient = us.NewUserService("mu.micro.book.srv.user", cl)
 	authClient = auth.NewService("mu.micro.book.srv.auth", cl)

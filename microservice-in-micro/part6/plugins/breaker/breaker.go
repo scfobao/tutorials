@@ -8,6 +8,7 @@ import (
 	"github.com/afex/hystrix-go/hystrix"
 	statusCode "github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/breaker/http"
 	"github.com/micro-in-cn/tutorials/microservice-in-micro/part6/plugins/graylog"
+	"github.com/micro/go-micro/util/log"
 )
 
 //BreakerWrapper hystrix breaker
@@ -20,6 +21,7 @@ func BreakerWrapper(h http.Handler) http.Handler {
 
 			if sct.Status >= http.StatusInternalServerError {
 				str := fmt.Sprintf("status code %d", sct.Status)
+				log.Logf("BreakerWrapper...", str)
 				graylog.GetLog(nil).Write(map[string]interface{}{"err": str, "sctStatus": sct.Status, "StatusInternalServerError": http.StatusInternalServerError})
 				return errors.New(str)
 			}

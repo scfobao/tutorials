@@ -30,14 +30,14 @@ type Error struct {
 }
 
 func Init() {
-	hystrix_go.DefaultVolumeThreshold = 1
-	hystrix_go.DefaultErrorPercentThreshold = 1
+	hystrix_go.DefaultVolumeThreshold = 20
+	hystrix_go.DefaultErrorPercentThreshold = 20
 	cl := hystrix.NewClientWrapper()(client.DefaultClient)
 	cl.Init(
 		client.Retries(3),
 		client.Retry(func(ctx context.Context, req client.Request, retryCount int, err error) (bool, error) {
 			log.Log(req.Method(), retryCount, " client retry")
-			return true, nil
+			return false, nil
 		}),
 	)
 	serviceClient = orders.NewOrdersService("mu.micro.book.srv.orders", cl)
